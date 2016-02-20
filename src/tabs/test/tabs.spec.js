@@ -8,6 +8,7 @@ describe('tabs', function() {
   function titles() {
     return elm.find('ul.nav-tabs li');
   }
+
   function contents() {
     return elm.find('div.tab-content div.tab-pane');
   }
@@ -71,17 +72,23 @@ describe('tabs', function() {
     });
 
     it('should bind tabs content and set first tab active', function() {
+      var t = titles();
       expectContents(['first content is 1', 'second content is 2']);
-      expect(titles().eq(0)).toHaveClass('active');
-      expect(titles().eq(1)).not.toHaveClass('active');
+      expect(t.eq(0)).toHaveClass('active');
+      expect(t.find('> a').eq(0)).toHaveClass('active');
+      expect(t.eq(1)).not.toHaveClass('active');
+      expect(t.find('> a').eq(1)).not.toHaveClass('active');
       expect(scope.active).toBe(1);
     });
 
     it('should change active on click', function() {
-      titles().eq(1).find('> a').click();
+      var t = titles();
+      t.eq(1).find('> a').click();
       expect(contents().eq(1)).toHaveClass('active');
-      expect(titles().eq(0)).not.toHaveClass('active');
-      expect(titles().eq(1)).toHaveClass('active');
+      expect(t.eq(0)).not.toHaveClass('active');
+      expect(t.find('> a').eq(0)).not.toHaveClass('active');
+      expect(t.eq(1)).toHaveClass('active');
+      expect(t.find('> a').eq(1)).toHaveClass('active');
       expect(scope.active).toBe(2);
     });
 
@@ -745,13 +752,17 @@ describe('tabs', function() {
     });
 
     it('should toggle between states', function() {
-      expect(titles().eq(3)).toHaveClass('disabled');
+      var t = titles();
+      expect(t.eq(3)).toHaveClass('disabled');
+      expect(t.find('> a').eq(3)).toHaveClass('disabled');
       scope.$apply('tabs[3].disable = false');
-      expect(titles().eq(3)).not.toHaveClass('disabled');
-
-      expect(titles().eq(2)).not.toHaveClass('disabled');
+      expect(t.eq(3)).not.toHaveClass('disabled');
+      expect(t.find('> a').eq(3)).not.toHaveClass('disabled');
+      expect(t.eq(2)).not.toHaveClass('disabled');
+      expect(t.find('> a').eq(2)).not.toHaveClass('disabled');
       scope.$apply('tabs[2].disable = true');
-      expect(titles().eq(2)).toHaveClass('disabled');
+      expect(t.eq(2)).toHaveClass('disabled');
+      expect(t.find('> a').eq(2)).toHaveClass('disabled');
     });
   });
 
